@@ -3,24 +3,26 @@ import * as html from './html-templates.js'
 
 const formContainer = document.querySelector('#form-container')
 const tableContainer = document.querySelector('#table-container')
-const apiBase = 'https://api.seatgeek.com/2'
 const apiKey = '' // You may need to include your API key
 
-function createLoadFormListener (button, formContainer, formHtml) {
-  button.addEventListener('click', function () {
-    const tabLinks = document.querySelectorAll('.tablink')
-    tabLinks.forEach(link => {
-      link.classList.remove('active-tab')
-    })
-    button.classList.add('active-tab')
-    formContainer.innerHTML = formHtml
-    const form = formContainer.querySelector('form')
-    form.addEventListener('submit', onFormSubmit)
+function renderTab (button, formContainer, formHtml) {
+  const tabLinks = document.querySelectorAll('.tablink')
+  tabLinks.forEach(link => {
+    link.classList.remove('active-tab')
   })
+  button.classList.add('active-tab')
+  formContainer.innerHTML = formHtml
+  const form = formContainer.querySelector('form')
+  form.addEventListener('submit', onFormSubmit)
+}
+
+function createLoadFormListener (button, formContainer, formHtml) {
+  button.addEventListener('click', () => renderTab(button, formContainer, formHtml))
 }
 
 createLoadFormListener(document.querySelector('#events-form-button'), formContainer, html.eventForm)
 createLoadFormListener(document.querySelector('#venues-form-button'), formContainer, html.venueForm)
+renderTab(document.querySelector('#events-form-button'), formContainer, html.eventForm)
 
 /*
   Creates a table element from an array of objects
@@ -92,4 +94,3 @@ function createTable (data) {
   table.appendChild(tableBody)
   return table
 }
-
