@@ -1,5 +1,4 @@
 import globals from 'globals'
-import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js'
 
 import path from 'path'
 import { fileURLToPath } from 'url'
@@ -12,7 +11,6 @@ const __dirname = path.dirname(__filename)
 const compat = new FlatCompat({ baseDirectory: __dirname, recommendedConfig: pluginJs.configs.recommended })
 
 export default [
-  { languageOptions: { globals: { ...globals.browser, ...globals.node } } },
-  ...compat.extends('standard'),
-  pluginReactConfig
+  { languageOptions: { globals: { ...globals.browser, ...globals.node, ...globals.jest } } },
+  ...compat.extends('standard')
 ]
