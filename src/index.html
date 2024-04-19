@@ -6,97 +6,14 @@
 <title>SeatGeek Event Search Form</title>
 </head>
 <body>
-    <form action="YOUR_SERVER_ENDPOINT" method="get">
-        <fieldset>
-            <legend id="search-title">Event Search</legend>
-            <label for="searchQuery">Search Query:
-                <input type="text" id="searchQuery" name="q">
-            </label>
-            <fieldset>
-                <legend>Date and Time Filters</legend>
-                <label for="startDateLocal">Start Date and Time (Local) >=:
-                    <input type="datetime-local" id="startDateLocal" name="datetime_local.gte">
-                </label>
-                <label for="endDateLocal">Start Date and Time (Local) <=:
-                    <input type="datetime-local" id="endDateLocal" name="datetime_local.lte">
-                </label>
-                <label for="startDateUTC">Start Date and Time (UTC) >=:
-                    <input type="datetime-local" id="startDateUTC" name="datetime_utc.gte">
-                </label>
-                <label for="endDateUTC">Start Date and Time (UTC) <=:
-                    <input type="datetime-local" id="endDateUTC" name="datetime_utc.lte">
-                </label>
-            </fieldset>
-            
-            <fieldset>
-                <legend>Venue Filters</legend>
-                <label for="city">City:
-                    <input type="text" id="city" name="venue.city">
-                </label>
-                <label for="state">State:
-                    <input type="text" id="state" name="venue.state">
-                </label>
-                <label for="country">Country:
-                    <input type="text" id="country" name="venue.country">
-                </label>
-            </fieldset>
-            
-            <fieldset>
-                <legend>Geo-Location Filters</legend>
-                <label for="latitude">Latitude:
-                    <input type="text" id="latitude" name="geo.lat">
-                </label>
-                <label for="longitude">Longitude:
-                    <input type="text" id="longitude" name="geo.lon">
-                </label>
-                <label for="range">Range:
-                    <input type="text" id="range" name="geo.range">
-                </label>
-            </fieldset>
-            
-            <fieldset>
-                <legend>Miscellaneous Filters</legend>
-                <label for="eventID">Event ID:
-                    <input type="number" id="eventID" name="id">
-                </label>
-                <label for="taxonomyName">Taxonomy Name:
-                    <input type="text" id="taxonomyName" name="taxonomies.name">
-                </label>
-                <label for="performerID">Performer ID:
-                    <input type="number" id="performerID" name="performers.id">
-                </label>
-                <label for="performerSlug">Performer Slug:
-                    <input type="text" id="performerSlug" name="performers.slug">
-                </label>
-                <label for="minListingsCount">Minimum Listings Count:
-                    <input type="number" id="minListingsCount" name="listings_count.gte">
-                </label>
-                <label for="maxListingsCount">Maximum Listings Count:
-                    <input type="number" id="maxListingsCount" name="listings_count.lte">
-                </label>
-                <label for="minLowestPrice">Minimum Lowest Price:
-                    <input type="number" id="minLowestPrice" name="lowest_price.gte">
-                </label>
-                <label for="maxLowestPrice">Maximum Lowest Price:
-                    <input type="number" id="maxLowestPrice" name="lowest_price.lte">
-                </label>
-                <label for="minHighestPrice">Minimum Highest Price:
-                    <input type="number" id="minHighestPrice" name="highest_price.gte">
-                </label>
-                <label for="maxHighestPrice">Maximum Highest Price:
-                    <input type="number" id="maxHighestPrice" name="highest_price.lte">
-                </label>
-                <label for="sort">Sort:
-                    <select id="sort" name="sort">
-                        <option value=""></option>
-                        <option value="date_asc">Date Ascending</option>
-                        <option value="date_desc">Date Descending</option>
-                    </select>
-                </label>
-            </fieldset>
-        </fieldset>
-        <button type="submit">Search Events</button>
-    </form>
+    <div id="side-bar">
+        <nav class="tabs">
+            <button class="tablink" id="events-form-button" type="button">Events</button>
+            <button class="tablink" id="venues-form-button" type="button">Venues</button>
+            <button class="tablink" id="performers-form-button" type="button">Performers</button>
+        </nav>
+        <div id="form-container"></div>
+    </div>
     <div id="table-container">
 
     </div>

@@ -1,10 +1,33 @@
 import './styles.css'
+import * as html from './html-templates.js'
 
-const form = document.querySelector('form')
+const formContainer = document.querySelector('#form-container')
 const tableContainer = document.querySelector('#table-container')
+const apiBase = 'https://api.seatgeek.com/2'
+const apiKey = '' // You may need to include your API key
 
-form.addEventListener('submit', function (event) {
+function createLoadFormListener (button, formContainer, formHtml) {
+  button.addEventListener('click', function () {
+    const tabLinks = document.querySelectorAll('.tablink')
+    tabLinks.forEach(link => {
+      link.classList.remove('active-tab')
+    })
+    button.classList.add('active-tab')
+    formContainer.innerHTML = formHtml
+    const form = formContainer.querySelector('form')
+    form.addEventListener('submit', onFormSubmit)
+  })
+}
+
+createLoadFormListener(document.querySelector('#events-form-button'), formContainer, html.eventForm)
+createLoadFormListener(document.querySelector('#venues-form-button'), formContainer, html.venueForm)
+
+/*
+  Creates a table element from an array of objects
+*/
+function onFormSubmit (event) {
   event.preventDefault()
+  const form = formContainer.querySelector('form')
 
   const formData = new FormData(form)
 
@@ -12,28 +35,30 @@ form.addEventListener('submit', function (event) {
   data = Object.fromEntries(Object.entries(data).map(([key, value]) => [key, value.trim()]).filter(([key, value]) => value !== ''))
   const urlSearchParams = new URLSearchParams(data)
 
-  const apiEndpoint = 'https://api.seatgeek.com/2/venues' // Replace this with the actual API endpoint
-  const apiKey = 'MzQxMzc3Nzd8MTcxMzQ2NjU0NS40NjE4Nzc2' // You may need to include your API key
+  const endpoint = form.action.split('/').pop()
 
   // Construct the full URL with filtered query parameters and API key
-  const url = `${apiEndpoint}?${urlSearchParams.toString()}&client_id=${apiKey}`
+  const url = `${form.action}?${urlSearchParams.toString()}&client_id=${apiKey}`
 
   fetch(url) // Make the API call
     .then(response => response.json())
     .then(data => {
       console.log(data.meta)
-      console.table(data.venues)
+      console.table(data[endpoint])
       tableContainer.innerHTML = ''
       tableContainer.appendChild(document.createTextNode(JSON.stringify(data.meta)))
-      tableContainer.appendChild(createTable(data.venues))
+      tableContainer.appendChild(createTable(data[endpoint]))
       tableContainer.appendChild(tableContainer)
-      return data.venues
+      return data[endpoint]
     })
     .catch((error) => {
       console.error('Error:', error)
     })
-})
+}
 
+/*
+  Creates a table element from an array of objects
+*/
 function createTable (data) {
   const table = document.createElement('table')
   const tableBody = document.createElement('tbody')
@@ -52,12 +77,12 @@ function createTable (data) {
   tableHeader.appendChild(headerRow)
   table.appendChild(tableHeader)
 
-  data.forEach(venue => {
+  data.forEach(respObj => {
     const row = document.createElement('tr')
 
     headers.forEach(header => {
       const cell = document.createElement('td')
-      cell.textContent = venue[header]
+      cell.textContent = respObj[header]
       row.appendChild(cell)
     })
 
@@ -67,3 +92,4 @@ function createTable (data) {
   table.appendChild(tableBody)
   return table
 }
+
