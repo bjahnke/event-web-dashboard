@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "jest": {
     "transform": {}
   },
@@ -33,6 +32,7 @@
     "webpack": "^5.91.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.0.4",
+    "webpack-bundle-analyzer": "^4.9.0",
     "webpack-merge": "^5.10.0",
     "jsdom": "^24.0.0"
   }
