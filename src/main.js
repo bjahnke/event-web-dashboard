@@ -3,6 +3,8 @@ import * as html from './html-templates.js'
 import * as util from './util.js'
 import pkg from 'seatgeek-client'
 
+
+// TODO - fix webpack config to get this working
 const client = new pkg.SeatGeekClient(process.env.SEATGEEK_CLIENT_ID)
 
 function htmlToRender (htmlText) {

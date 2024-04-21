@@ -8,13 +8,10 @@ import webpack from 'webpack'
 import { config as configDotEnv } from 'dotenv'
 import { fileURLToPath } from 'url'
 import NodePolyfillPlugin from 'node-polyfill-webpack-plugin'
+configDotEnv()
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
-
-const dotenv = configDotEnv({
-  path: './.env'
-})
 
 const config = {
   // multiple entries
@@ -52,7 +49,7 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': JSON.stringify(dotenv.parsed)
+      'process.env.SEATGEEK_CLIENT_ID': JSON.stringify(process.env.SEATGEEK_CLIENT_ID)
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html'
