@@ -1,8 +1,7 @@
 import './styles.css'
 import * as html from './html-templates.js'
 import * as util from './util.js'
-import pkg from 'seatgeek-client'
-
+import pkg from 'seatgeek-client-2'
 
 // TODO - fix webpack config to get this working
 const client = new pkg.SeatGeekClient(process.env.SEATGEEK_CLIENT_ID)

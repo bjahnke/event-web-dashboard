@@ -48,6 +48,6 @@
   },
   "dependencies": {
     "request": "^2.88.2",
-    "seatgeek-client": "^0.1.5"
+    "seatgeek-client-2": "^0.1.0"
   }
 }

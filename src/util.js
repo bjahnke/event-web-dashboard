@@ -39,8 +39,8 @@ export class SideBarTab {
   constructor (button, render, endpointCallback) {
     this.button = button
     this._render = render
+    this.endpointName = render.action.split('/').pop()
     this.endpointCallback = endpointCallback
-    // this.formHtml.addEventListener('submit', createOnFormSubmit(this.endpointCallback))
   }
 
   /*
@@ -60,6 +60,17 @@ export class SideBarTab {
   get render () {
     this.setTabStyleActive()
     return this._render
+  }
+
+  /*
+    Returns: a function that will call the endpoint associated with this tab
+    normalize endpoint response to { data: [data], meta: { meta } }
+  */
+  async endpoint (data) {
+    const response = await this.endpointCallback(data)
+    response.data = response[this.endpointName]
+    delete response[this.endpointName]
+    return response
   }
 }
 
@@ -81,7 +92,7 @@ export class Dashboard {
         this.formContainer.innerHTML = ''
         this.formContainer.appendChild(tab.render)
       })
-      tab.render.addEventListener('submit', this._onFormSubmitCreateTable(tab.endpointCallback))
+      tab.render.addEventListener('submit', this._onFormSubmitCreateTable(tab.endpoint.bind(tab)))
     })
   }
 
@@ -105,10 +116,98 @@ export class Dashboard {
       const response = await endpointCallback(filteredData)
 
       const metaData = document.createTextNode(JSON.stringify(response.meta))
-      const table = createTable(response[event.target.action])
+      const table = createTable(response.data)
       this.tableContainer.innerHTML = ''
       this.tableContainer.appendChild(metaData)
       this.tableContainer.appendChild(table)
     }
   }
 }
+
+/*
+Example data structures for valid queries:
+
+let venuesSearch = {
+  ids: [1, 2 , 3],
+  cityName: 'Boston',
+  stateCode: 'MA',
+  countryCode: 'USA',
+  postalCode: '02122',
+  queryString: 'WICKED PISSAH DOOD',
+  useIpAddress: true,
+  latitude: 4,
+  longitude: 5,
+  range: 6,
+  unit: Unit.MILE,
+  perPage: 7,
+  page: 8,
+};
+
+let query = {
+  ids: [1, 2, 3, 4],
+  venues: {
+    ids: [5, 6, 7],
+    cityName: 'Boston',
+    stateCode: 'MA',
+    countryCode: 'US',
+    postalCode: '02144'
+  },
+  performers: [
+    {
+      field: PerformerField.ID,
+      specificity: PerformerSpecificity.ANY,
+      value: 8
+    },
+    {
+      field: PerformerField.SLUG,
+      specificity: PerformerSpecificity.PRIMARY,
+      value: 'boston-celtics'
+    }
+  ],
+  taxonomies: [
+    {
+      taxonomy: Taxonomy.NBA
+    },
+    {
+      taxonomy: Taxonomy.CONCERTS,
+      field: TaxonomyField.PARENT_ID,
+    }
+  ],
+  filters: [
+    {
+      option: FilterOption.AVERAGE_PRICE,
+      operator: Operator.LESS_THAN,
+      value: 9
+    },
+    {
+      option: FilterOption.LISTING_COUNT,
+      operator: Operator.GREATER_THAN_OR_EQUAL_TO,
+      value: 10
+    }
+  ],
+  geolocation: {
+    useIpAddress: false,
+    latitude: 10,
+    longitude: 11,
+    range: 12,
+    unit: Unit.KILOMETER
+  },
+  sort: {
+    option: SortOption.ID,
+    direction: SortDirection.ASCENDING
+  },
+  perPage: 13,
+  page: 14
+};
+
+let performersSearch = {
+  ids: [1, 2, 3],
+  slugs: ['performer-slug-1', 'performer-slug-2'],
+  taxonomies: [Taxonomy.NBA, Taxonomy.CONCERT],
+  genres: [Genre.POP, Genre.CLASSICAL],
+  queryString: 'jaebaebae',
+  perPage: 4,
+  page: 5
+};
+
+*/
