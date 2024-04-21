@@ -88,7 +88,7 @@ const searchQuery = `
 
 const createForm = (topic, formHTML) => {
   return `
-    <form id="main-form" action="https://api.seatgeek.com/2/${topic}" method="get">
+    <form id="main-form" action="${topic}" method="get">
       <fieldset id="search-fieldset">
         ${searchQuery}
         ${formHTML}
@@ -150,6 +150,42 @@ export const venueForm = createForm(
       </label>
       <label for="venueCapacity">Capacity:
         <input type="number" id="venueCapacity" name="capacity.gte">
+      </label>
+    </fieldset>
+  `
+)
+
+export const performerForm = createForm(
+  'performers',
+  `
+    <fieldset>
+      <label for="performerId">Performer ID:
+        <input type="number" id="performerId" name="id">
+      </label>
+      <label for="performerName">Performer Name:
+        <input type="text" id="performerName" name="name">
+      </label>
+      <label for="performerSlug">Performer Slug:
+        <input type="text" id="performerSlug" name="slug">
+      </label>
+      <label for="genre">Genre:
+        <input type="text" id="genre" name="taxonomies.name">
+      </label>
+      <label for="hasUpcomingEvents">Has Upcoming Events:
+        <select id="hasUpcomingEvents" name="has_upcoming_events">
+            <option value=""></option>
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+        </select>
+      </label>
+      <label for="sort">Sort By:
+        <select id="sort" name="sort">
+            <option value=""></option>
+            <option value="name_asc">Name Ascending</option>
+            <option value="name_desc">Name Descending</option>
+            <option value="score_asc">Score Ascending</option>
+            <option value="score_desc">Score Descending</option>
+        </select>
       </label>
     </fieldset>
   `
