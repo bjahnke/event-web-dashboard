@@ -1,49 +1,4 @@
 /*
-  assigns a form to a tab button
-  Includes visual feedback to track the active tab
-  assigns listener to the form submit button
-*/
-export function renderTab (client, button, formContainer, formHtml, tableContainer) {
-  const tabLinks = document.querySelectorAll('.tablink')
-  tabLinks.forEach(link => {
-    link.classList.remove('active-tab')
-  })
-  button.classList.add('active-tab')
-  formContainer.innerHTML = formHtml
-  const form = formContainer.querySelector('form')
-  form.addEventListener('submit', createOnFormSubmit(client, formContainer, tableContainer))
-  return form
-}
-
-/*
-  Creates a table element from an array of objects
-*/
-export function createOnFormSubmit (client, formContainer, tableContainer) {
-  return async (event) => {
-    event.preventDefault()
-    const form = formContainer.querySelector('form')
-    const endpoint = form.action
-
-    const formData = new FormData(form)
-    const data = Object.fromEntries(formData.entries())
-
-    const map = {
-      events: client.getEvents.bind(client),
-      venues: client.getVenues.bind(client),
-      performers: client.getPerformers.bind(client)
-    }
-
-    const response = await map[endpoint](data)
-
-    tableContainer.innerHTML = ''
-    tableContainer.appendChild(document.createTextNode(JSON.stringify(response.meta)))
-    tableContainer.appendChild(createTable(response[endpoint]))
-    tableContainer.appendChild(tableContainer)
-    return response[endpoint]
-  }
-}
-
-/*
   Creates a table element from an array of objects
 */
 function createTable (data) {
@@ -80,6 +35,80 @@ function createTable (data) {
   return table
 }
 
-export function createLoadFormListener (button, formContainer, formHtml) {
-  button.addEventListener('click', () => renderTab(button, formContainer, formHtml))
+export class SideBarTab {
+  constructor (button, render, endpointCallback) {
+    this.button = button
+    this._render = render
+    this.endpointCallback = endpointCallback
+    // this.formHtml.addEventListener('submit', createOnFormSubmit(this.endpointCallback))
+  }
+
+  /*
+    Sets this tab style to active to visually track the active tab
+  */
+  setTabStyleActive () {
+    const tabLinks = document.querySelectorAll('.tablink')
+    tabLinks.forEach(link => {
+      link.classList.remove('active-tab')
+    })
+    this.button.classList.add('active-tab')
+  }
+
+  /*
+    Renders the form to the form container
+  */
+  get render () {
+    this.setTabStyleActive()
+    return this._render
+  }
+}
+
+export class Dashboard {
+  constructor (formContainer, tableContainer, tabs) {
+    this.formContainer = formContainer
+    this.tableContainer = tableContainer
+    this.tabs = tabs
+    this.initRenderOnClick()
+  }
+
+  /*
+    Initiates renders for all tabs
+    Informs tab objects where to render
+  */
+  initRenderOnClick () {
+    Object.values(this.tabs).forEach(tab => {
+      tab.button.addEventListener('click', () => {
+        this.formContainer.innerHTML = ''
+        this.formContainer.appendChild(tab.render)
+      })
+      tab.render.addEventListener('submit', this._onFormSubmitCreateTable(tab.endpointCallback))
+    })
+  }
+
+  /*
+    Renders any tab to the form container
+  */
+  renderTab (tabName) {
+    this.formContainer.innerHTML = ''
+    this.formContainer.appendChild(this.tabs[tabName].render)
+  }
+
+  /*
+    Returns: a function that will render a table to the table container
+  */
+  _onFormSubmitCreateTable (endpointCallback) {
+    return async (event) => {
+      event.preventDefault()
+      const formData = new FormData(event.target)
+      const data = Object.fromEntries(formData.entries())
+      const filteredData = Object.fromEntries(Object.entries(data).filter(([key, value]) => value !== ''))
+      const response = await endpointCallback(filteredData)
+
+      const metaData = document.createTextNode(JSON.stringify(response.meta))
+      const table = createTable(response[event.target.action])
+      this.tableContainer.innerHTML = ''
+      this.tableContainer.appendChild(metaData)
+      this.tableContainer.appendChild(table)
+    }
+  }
 }

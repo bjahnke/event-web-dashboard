@@ -59,3 +59,7 @@ background-color: #ddd;
 .tabs button.active-tab {
 background-color: #ccc;
 }
+
+select {
+    display: block;
+}

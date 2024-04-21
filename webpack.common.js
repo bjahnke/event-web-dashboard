@@ -52,7 +52,7 @@ const config = {
   },
   plugins: [
     new webpack.DefinePlugin({
-      'process.env': `(${JSON.stringify(dotenv.parsed)})`
+      'process.env': JSON.stringify(dotenv.parsed)
     }),
     new HtmlWebpackPlugin({
       template: './src/index.html'
@@ -66,6 +66,7 @@ const config = {
     rules: [
       {
         test: /\.(?:js|mjs|cjs)$/,
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
@@ -106,20 +107,8 @@ const config = {
     extensions: ['.tsx', '.ts', '.js'],
     fallback: {
       fs: false,
-      tls: false,
       net: false,
-      path: false,
-      zlib: false,
-      http: false,
-      https: false,
-      stream: false,
-      crypto: false,
-      url: false,
-      assert: false,
-      util: false,
-      querystring: false,
-      os: false
-
+      tls: false
       // 'crypto-browserify': require.resolve('crypto-browserify') // if you want to use this module also don't forget npm i crypto-browserify
     }
   }
