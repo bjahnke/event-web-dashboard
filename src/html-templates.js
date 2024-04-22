@@ -1,3 +1,15 @@
+const paginationFieldSet = `
+  <fieldset>
+    <legend>Pagination</legend>
+    <label for="perPage">Results Per Page:
+        <input type="number" id="perPage" name="per_page" min="1">
+    </label>
+    <label for="page">Page Number:
+        <input type="number" id="page" name="page" min="1">
+    </label>
+  </fieldset>
+`
+
 const dateRangeForm = `
   <legend>Date and Time Range Filters</legend>
   <label for="startDateLocal">Start Period (Local):
@@ -17,13 +29,13 @@ const dateRangeForm = `
 const venueFilterForm = `
   <legend>Venue Filters</legend>
   <label for="city">City:
-      <input type="text" id="city" name="venue.city">
+      <input type="text" id="city" name="venue.cityName">
   </label>
   <label for="state">State:
-      <input type="text" id="state" name="venue.state">
+      <input type="text" id="state" name="venue.stateCode">
   </label>
   <label for="country">Country:
-      <input type="text" id="country" name="venue.country">
+      <input type="text" id="country" name="venue.countryCode">
   </label>
 `
 
@@ -82,7 +94,7 @@ const miscFilterForm = `
 `
 const searchQuery = `
   <label for="searchQuery">Search Query:
-      <input type="text" id="searchQuery" name="q">
+      <input type="text" id="queryString" name="q">
   </label>
 `
 
@@ -93,6 +105,7 @@ const createForm = (topic, formHTML) => {
         ${searchQuery}
         ${formHTML}
       </fieldset>
+      ${paginationFieldSet}
       <button type="submit">Search</button>
     </form>
   `
@@ -125,7 +138,7 @@ export const venueForm = createForm(
     <fieldset>
       <legend>Venue ID</legend>
       <label for="venueId">Venue ID:
-        <input type="number" id="venueId" name="id">
+        <input type="number" id="venueId" name="ids">
       </label>
     </fieldset>
     <fieldset>
@@ -134,16 +147,16 @@ export const venueForm = createForm(
         <input type="text" id="venueName" name="name">
       </label>
       <label for="venueCity">City:
-        <input type="text" id="venueCity" name="city">
+        <input type="text" id="venueCity" name="cityName">
       </label>
       <label for="venueState">State:
-        <input type="text" id="venueState" name="state">
+        <input type="text" id="venueState" name="stateCode">
       </label>
       <label for="venueCountry">Country:
-        <input type="text" id="venueCountry" name="country">
+        <input type="text" id="venueCountry" name="countryCode">
       </label>
       <label for="venuePostalCode">Postal Code:
-        <input type="text" id="venuePostalCode" name="postal_code">
+        <input type="text" id="venuePostalCode" name="postalCode">
       </label>
       <label for="venueStateCode">State Code:
         <input type="text" id="venueStateCode" name="state_code">
@@ -151,6 +164,30 @@ export const venueForm = createForm(
       <label for="venueCapacity">Capacity:
         <input type="number" id="venueCapacity" name="capacity.gte">
       </label>
+
+      <fieldset>
+        <legend>Geo-Location</legend>
+        <label for="useIpAddress">Use My Geo-Location
+          <input type="checkbox" id="useIpAddress" name="useIpAddress">
+        </label>
+        <label for="latitude">Latitude
+          <input id="latitude" name="latitude" type="number">
+        </label>
+        <label for="longitude">
+          <input id="longitude" name="latitude" type="number">
+        </label>
+        <label for="range">Range
+          <input id="range" name="range" type="number">
+        </label>
+        <label for="unit">Unit
+          <select id="unit" name="unit">
+            <option value=""></option>
+            <option value="km">Kilometers</option>
+            <option value="mile">Miles</option>
+          </select>
+        </label>
+      </fieldset>
+
     </fieldset>
   `
 )
