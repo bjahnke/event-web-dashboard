@@ -63,3 +63,7 @@ background-color: #ccc;
 select {
     display: block;
 }
+
+.hide {
+    display: none;
+}

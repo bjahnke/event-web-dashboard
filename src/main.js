@@ -38,3 +38,5 @@ const dashboard = new util.Dashboard(
 )
 
 dashboard.renderTab('events')
+
+export const toggleFieldset = util.toggleFieldset

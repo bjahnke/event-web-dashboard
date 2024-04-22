@@ -73,7 +73,7 @@ export class Dashboard {
   _onFormSubmitCreateTable (endpointCallback) {
     return async (event) => {
       event.preventDefault()
-      const query = Private.formToQuery(event.target)
+      const query = InputTranslator.formToQuery(event.target)
       const response = await endpointCallback(query)
       const metaData = document.createTextNode(JSON.stringify(response.meta))
       const table = createTable(response.data)
@@ -209,10 +209,16 @@ let performersSearch = {
 
 */
 
-/*
-  Class labels private util methods that are exported only for testing
-*/
-export class Private {
+export function toggleFieldset (legend) {
+  const content = legend.nextElementSibling;
+  if (content.classList.contains('hide')) {
+    content.classList.remove('hide');
+  } else {
+    content.classList.add('hide');
+  }
+}
+
+class InputTranslator {
   /*
     Parses Object.fromEntries, translates dot '.' in key to nested object
     for compatibility with SeatGeek API
@@ -234,8 +240,8 @@ export class Private {
   }
 
   /*
-    Parses string values to their respective types for compatibility with SeatGeek API
-  */
+      Parses string values to their respective types for compatibility with SeatGeek API
+    */
   static parseInputTypes (query, form) {
     const parsedQuery = {}
     for (let [name, value] of Object.entries(query)) {
@@ -251,14 +257,23 @@ export class Private {
   }
 
   /*
-    Converts form data to query object for SeatGeek API
-  */
+      Converts form data to query object for SeatGeek API
+    */
   static formToQuery (form) {
     const formData = new FormData(form)
     let query = Object.fromEntries(formData.entries())
     query = Object.fromEntries(Object.entries(query).filter(([key, value]) => value !== ''))
-    query = Private.parseInputTypes(query, form)
-    query = Private.nestDotKeys(query)
+    query = InputTranslator.parseInputTypes(query, form)
+    query = InputTranslator.nestDotKeys(query)
     return query
+  }
+}
+
+/*
+  Class labels private util methods that are exported only for testing
+*/
+export class Private {
+  static get InputTranslator () {
+    return InputTranslator
   }
 }

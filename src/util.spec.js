@@ -16,7 +16,7 @@ describe('transformObject', () => {
       singleKey: 'singleValue'
     }
 
-    const result = Private.nestDotKeys(obj)
+    const result = Private.InputTranslator.nestDotKeys(obj)
 
     expect(result).toEqual(expected)
   })
@@ -28,7 +28,7 @@ describe('transformObject', () => {
       key3: 'value3'
     }
 
-    const result = Private.nestDotKeys(obj)
+    const result = Private.InputTranslator.nestDotKeys(obj)
 
     expect(result).toEqual(obj)
   })
